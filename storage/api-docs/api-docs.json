@@ -1,0 +1,305 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "APIs For Event",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/events/{eventId}/reserve": {
+            "post": {
+                "tags": [
+                    "api:ticket:events"
+                ],
+                "summary": "Забронировать места события",
+                "operationId": "8bde083d27602babfc26876e05fafbe1",
+                "parameters": [
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "параметры",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "places[]"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "places[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EventBookSeatsResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not allowed"
+                    }
+                }
+            }
+        },
+        "/api/shows/{showId}/events": {
+            "get": {
+                "tags": [
+                    "api:ticket:shows"
+                ],
+                "summary": "Список событий мероприятия",
+                "operationId": "5254462f27b7b56cf12a07616df53b59",
+                "parameters": [
+                    {
+                        "name": "showId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EventsResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not allowed"
+                    }
+                }
+            }
+        },
+        "/api/events/{eventId}/places": {
+            "get": {
+                "tags": [
+                    "api:ticket:events"
+                ],
+                "summary": "Список мест события",
+                "operationId": "0d7315c2ea9c7aede8275e49f1f60cef",
+                "parameters": [
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PlacesResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not allowed"
+                    }
+                }
+            }
+        },
+        "/api/shows": {
+            "get": {
+                "tags": [
+                    "api:ticket:shows"
+                ],
+                "summary": "Список мероприятий",
+                "operationId": "a3b523df9efcdbef35f0c610d0305573",
+                "responses": {
+                    "200": {
+                        "description": "The data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ShowsResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not allowed"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "EventBookSeatsResponseDTO": {
+                "title": "response",
+                "description": "Бронирование",
+                "properties": {
+                    "response": {
+                        "$ref": "#/components/schemas/ReserveResponseDTO"
+                    }
+                },
+                "type": "object"
+            },
+            "ReserveResponseDTO": {
+                "title": "reserve",
+                "description": "объект бронирование",
+                "properties": {
+                    "reservation_id": {
+                        "description": "ID резерва",
+                        "type": "string"
+                    },
+                    "success": {
+                        "description": "Результат бронирования",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "PlaceResponseDTO": {
+                "title": "place",
+                "description": "Мест",
+                "properties": {
+                    "id": {
+                        "description": "ID места",
+                        "type": "integer"
+                    },
+                    "x": {
+                        "description": "Координата X",
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "y": {
+                        "description": "Координата Y",
+                        "type": "number"
+                    },
+                    "width": {
+                        "description": "Ширина",
+                        "type": "number"
+                    },
+                    "height": {
+                        "description": "Высота",
+                        "type": "number"
+                    },
+                    "is_available": {
+                        "description": "Место доступно",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "PlacesResponseDTO": {
+                "title": "places",
+                "description": "Списка мест события",
+                "properties": {
+                    "response": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PlaceResponseDTO"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "EventResponseDTO": {
+                "title": "event",
+                "description": "Событие",
+                "properties": {
+                    "id": {
+                        "description": "ID события",
+                        "type": "integer"
+                    },
+                    "showId": {
+                        "description": "ID мероприятия",
+                        "type": "integer"
+                    },
+                    "date": {
+                        "description": "Дата события",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "EventsResponseDTO": {
+                "title": "events",
+                "description": "Списка событий мероприятия",
+                "properties": {
+                    "response": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventResponseDTO"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ShowResponseDTO": {
+                "title": "show",
+                "description": "Мероприятие",
+                "properties": {
+                    "id": {
+                        "description": "ID мероприятия",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Название мероприятия",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ShowsResponseDTO": {
+                "title": "shows",
+                "description": "Список мероприятий",
+                "properties": {
+                    "response": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ShowResponseDTO"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "api:ticket:events",
+            "description": "api:ticket:events"
+        },
+        {
+            "name": "api:ticket:shows",
+            "description": "api:ticket:shows"
+        }
+    ]
+}
